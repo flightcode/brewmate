@@ -1,0 +1,11 @@
+{
+  "name": "brewmate-server",
+  "version": "0.1.0",
+  "description": "MongoDB API Server for BrewMate",
+  "author": "flightcode",
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
