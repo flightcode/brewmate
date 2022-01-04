@@ -8,14 +8,14 @@ router.get('/beer', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/beer/type/:type', (req, res, next) => {
-  Beer.find({ type: req.params.type })
+router.get('/beer/:id', (req, res, next) => {
+  Beer.findById({ _id: req.params.id })
     .then((data) => res.json(data))
     .catch(next);
 });
 
-router.get('/beer/:id', (req, res, next) => {
-  Beer.findById({ _id: req.params.id })
+router.get('/beer/type/:type', (req, res, next) => {
+  Beer.find({ type: req.params.type })
     .then((data) => res.json(data))
     .catch(next);
 });
