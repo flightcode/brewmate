@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BrewerySchema = new Schema({
-  name: String,
+  name: { type: String, required: true },
   country: String,
   website: String
 });
