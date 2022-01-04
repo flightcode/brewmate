@@ -21,7 +21,7 @@ router.get('/beer/type/:type', (req, res, next) => {
 });
 
 router.post('/beer', (req, res, next) => {
-  if(req.body.name && req.body.brewery && req.body.type) {
+  if(req.body.name && req.body.type) {
     Beer.create(req.body)
       .then((data) => res.json(data))
       .catch(next);
