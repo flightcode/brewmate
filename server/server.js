@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const app = express();
 
-mongoose.connect(process.env.DB_URI)
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true })
   .then(() => console.log(`Database connected successfully`))
   .catch((err) => console.error(err)
 );
@@ -18,6 +18,7 @@ app.use(express.json());
 
 app.use(require("./routes/beer"));
  
-app.listen(process.env.PORT || 5000, 
-  () => console.log(`Server is running on port: ${port}`)
+const port = process.env.PORT || 5000;
+app.listen(port, 
+  () => console.log(`Server is running on port ${port}`)
 );
