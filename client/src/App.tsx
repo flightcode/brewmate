@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { Home, Beers } from "./routes";
+import { Home, Beer } from "./routes";
 import { NavbarWrapper } from "./components";
 
 const App: React.FC = () => (
@@ -9,7 +9,7 @@ const App: React.FC = () => (
     <Routes>
       <Route path="/">
         <Route index element={<Home />} />
-        <Route path="beer" element={<Beers />} />
+        <Route path="beer" element={<Beer />} />
       </Route>
     </Routes>
   </div>
