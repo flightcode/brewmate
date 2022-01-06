@@ -4,7 +4,6 @@ const router = express.Router();
 const Brewery = require("../controllers/beer");
 
 router.get("/brewery", Brewery.getAll);
-
 router.get("/brewery/:id", Brewery.getById);
 
 // router.get("/brewery/country/:country", (req, res, next) => {
@@ -14,7 +13,6 @@ router.get("/brewery/:id", Brewery.getById);
 // });
 
 router.post("/brewery", Brewery.add);
-
 router.delete("/brewery/:id", Brewery.remove);
 
 module.exports = router;
