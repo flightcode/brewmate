@@ -1,11 +1,11 @@
 const express = require("express");
 
 const router = express.Router();
-const beer = require("../controllers/beer");
+const Beer = require("../controllers/beer");
 
-router.get("/beer", beer.getAll);
+router.get("/beer", Beer.getAll);
 
-router.get("/beer/:id", beer.getById);
+router.get("/beer/:id", Beer.getById);
 
 // router.get('/beer/type/:type', (req, res, next) => {
 //   Beer.find({ type: req.params.type })
@@ -13,8 +13,8 @@ router.get("/beer/:id", beer.getById);
 //     .catch(next);
 // });
 
-router.post("/beer", beer.add);
+router.post("/beer", Beer.add);
 
-router.delete("/beer/:id", beer.remove);
+router.delete("/beer/:id", Beer.remove);
 
 module.exports = router;
