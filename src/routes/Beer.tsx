@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-const Beers: React.FC = () => (
+const Beer: React.FC = () => (
   <div>
     <Helmet>
       <title>Beers - BrewMate</title>
@@ -10,4 +10,4 @@ const Beers: React.FC = () => (
   </div>
 );
 
-export { Beers };
+export { Beer };
