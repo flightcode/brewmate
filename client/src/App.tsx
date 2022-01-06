@@ -1,19 +1,17 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Home, Beers } from "./routes";
 import { NavbarWrapper } from "./components";
 
 const App: React.FC = () => (
   <div>
     <NavbarWrapper />
-    <BrowserRouter>
-      <Routes>
-        <Route path="/">
-          <Route index element={<Home />} />
-          <Route path="beer" element={<Beers />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/">
+        <Route index element={<Home />} />
+        <Route path="beer" element={<Beers />} />
+      </Route>
+    </Routes>
   </div>
 );
 
