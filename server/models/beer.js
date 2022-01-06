@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+
+const { Schema } = mongoose;
 
 const BeerSchema = new Schema({
   name: { type: String, required: true },
@@ -8,9 +9,9 @@ const BeerSchema = new Schema({
   hops: [String],
   malts: [String],
   abv: Number,
-  ibu: Number
+  ibu: Number,
 });
 
-const Beer = mongoose.model('beer', BeerSchema);
+const Beer = mongoose.model("beer", BeerSchema);
 
 module.exports = Beer;
