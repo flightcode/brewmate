@@ -10,6 +10,8 @@
   },
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "no-underscore-dangle": 1,
+    "consistent-return": "off"
   }
 }
