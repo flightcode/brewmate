@@ -11,7 +11,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-underscore-dangle": 1,
+    "no-underscore-dangle": "off",
     "consistent-return": "off"
   }
 }
