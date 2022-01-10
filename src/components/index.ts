@@ -1,3 +1,3 @@
 export * from "./NavbarWrapper";
-export * from "./Footer";
+export * from "./FooterWrapper";
 export * from "./BeerCard";
