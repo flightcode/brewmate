@@ -7,7 +7,7 @@ import { NavbarWrapper, FooterWrapper } from "./components";
 const App: React.FC = () => (
   <div>
     <NavbarWrapper />
-    <Container className="mt-4">
+    <Container className="my-4">
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
