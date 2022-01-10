@@ -12,7 +12,7 @@ interface Beer {
 }
 
 const BeerCard: React.FC<Beer> = (props: Beer) => (
-  <Card style={{ width: "18rem" }}>
+  <Card className="mx-auto" style={{ width: "18rem" }}>
     <Card.Img variant="top" src="https://via.placeholder.com/250x500" />
     <Card.Body>
       <Card.Title>{props.name}</Card.Title>
