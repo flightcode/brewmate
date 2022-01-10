@@ -13,19 +13,21 @@ interface Beer {
 
 const BeerCard: React.FC<Beer> = (props: Beer) => (
   <Card className="mx-auto" style={{ width: "18rem" }}>
-    <Card.Img variant="top" src="https://via.placeholder.com/250x500" />
+    <Card.Img variant="top" src="https://via.placeholder.com/1000x1600" />
     <Card.Body>
       <Card.Title>{props.name}</Card.Title>
       <Card.Subtitle>{props.brewery}</Card.Subtitle>
-      <Card.Subtitle>{props.type}</Card.Subtitle>
-      <ListGroup variant="flush">
-        <ListGroup.Item>Description</ListGroup.Item>
-        <ListGroup.Item>Hops: {props.hops.join(", ")}</ListGroup.Item>
-        <ListGroup.Item>Malts: {props.malts.join(", ")}</ListGroup.Item>
-        <ListGroup.Item>
-          ABV: {props.abv}% IBU: {props.ibu}
-        </ListGroup.Item>
-      </ListGroup>
+      <Card.Text>
+        {props.type}
+        <br />
+        ABV: {props.abv}% IBU: {props.ibu}
+        <br />
+        Hops: {props.hops.join(", ")}
+        <br />
+        Malts: {props.malts.join(", ")}
+        <br />
+      </Card.Text>
+      <ListGroup variant="flush" />
       <Button variant="primary">Review</Button>
     </Card.Body>
   </Card>
