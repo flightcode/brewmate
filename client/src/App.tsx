@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Home, BeerList } from "./routes";
-import { NavbarWrapper } from "./components";
+import { NavbarWrapper, FooterWrapper } from "./components";
 
 const App: React.FC = () => (
   <div>
@@ -15,6 +15,7 @@ const App: React.FC = () => (
         </Route>
       </Routes>
     </Container>
+    <FooterWrapper />
   </div>
 );
 
