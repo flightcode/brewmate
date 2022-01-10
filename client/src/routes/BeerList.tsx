@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { Row, Col } from "react-bootstrap";
-import { BeerCard } from "../components/BeerCard";
+import { BeerCard } from "../components";
 
 interface Beer {
   _id: string;
