@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { Row, Col } from "react-bootstrap";
+import { api } from "../utils";
 import { BeerCard } from "../components";
 
 interface Beer {
@@ -19,7 +19,7 @@ const BeerList: React.FC = () => {
   const [beers, setBeers] = useState([]);
 
   useEffect(() => {
-    axios
+    api
       .get("http://localhost:5000/api/beer")
       .then((res) => {
         if (res.data) {
