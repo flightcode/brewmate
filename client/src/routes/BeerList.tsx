@@ -20,7 +20,7 @@ const BeerList: React.FC = () => {
 
   useEffect(() => {
     api
-      .get("http://localhost:5000/api/beer")
+      .get("/beer")
       .then((res) => {
         if (res.data) {
           setBeers(res.data);
