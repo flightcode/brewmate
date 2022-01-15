@@ -15,7 +15,7 @@ const NavbarWrapper: React.FC = () => {
           console.log(res.data);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, [""]);
 
   return (
