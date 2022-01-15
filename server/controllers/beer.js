@@ -7,12 +7,12 @@ exports.getAll = (req, res, next) => {
 };
 
 exports.search = (req, res, next) => {
+  const searchTerm = req.params.search;
+
   Beer.find({
     $or: [
-      {
-        name: { $regex: req.params.search },
-        type: { $regex: req.params.search },
-      },
+      { name: { $regex: `${searchTerm}` } },
+      { type: { $regex: `${searchTerm}` } },
     ],
   })
     .then((data) => res.json(data))

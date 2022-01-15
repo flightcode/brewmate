@@ -3,8 +3,8 @@ const express = require("express");
 const router = express.Router();
 const Beer = require("../controllers/beer");
 
-router.get("/beer", Beer.getAll);
-router.get("/beer/search/:search", Beer.search);
+router.get("/beers", Beer.getAll);
+router.get("/beers/:search", Beer.search);
 
 // router.get('/beer/type/:type', (req, res, next) => {
 //   Beer.find({ type: req.params.type })
