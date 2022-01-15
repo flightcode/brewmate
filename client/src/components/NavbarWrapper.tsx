@@ -7,16 +7,13 @@ const NavbarWrapper: React.FC = () => {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    api
-      .get("/user/isAuth")
-      .then((res) => {
-        if (res.data.name) {
-          setUsername(res.data.name);
-          console.log(res.data.name);
-        }
-      })
-      .catch((err) => console.error(err));
-  }, [""]);
+    api.get("/user/isAuth").then((res) => {
+      if (res.status === 200) {
+        setUsername(res.data.name);
+        console.log(res.data.name);
+      }
+    });
+  });
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
