@@ -49,10 +49,10 @@ const NavbarWrapper: React.FC = () => {
           {username ? (
             <Nav>
               <LinkContainer to={`/user/${username}`}>
-                <Nav.Link>Profile</Nav.Link>
+                <Nav.Link>Dashboard</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/logout">
-                <Nav.Link>Register</Nav.Link>
+                <Nav.Link>Log Out</Nav.Link>
               </LinkContainer>
             </Nav>
           ) : (
