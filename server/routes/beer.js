@@ -13,7 +13,6 @@ router.get("/beer/search/:search", Beer.search);
 // });
 
 router.get("/beer/:id", Beer.getById);
-
 router.post("/beer", Beer.add);
 router.delete("/beer/:id", Beer.remove);
 
