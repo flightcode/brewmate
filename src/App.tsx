@@ -1,7 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import { Home, BeerList, Login, Register } from "./routes";
+import {
+  Home,
+  BeerList,
+  Login,
+  Register,
+  Dashboard,
+  PrivacyPolicy,
+} from "./routes";
 import { NavbarWrapper, FooterWrapper } from "./components";
 
 const App: React.FC = () => (
@@ -14,6 +21,8 @@ const App: React.FC = () => (
           <Route path="beer" element={<BeerList />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="privacy" element={<PrivacyPolicy />} />
         </Route>
       </Routes>
     </Container>
