@@ -6,14 +6,12 @@ exports.verifyToken = (req, res, next) => {
   const token = req.headers["x-access-token"]?.split(" ")[1];
 
   if (!token) {
-    return res
-      .status(403)
-      .json({ errors: [{ token: "required" }], isLoggedIn: false });
+    return res.status(422).json({ errors: [{ token: "required" }] });
   }
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      return res.json({ errors: [{ token: "invalid" }], isLoggedIn: false });
+      return res.status(422).json({ errors: [{ token: "invalid" }] });
     }
 
     req.user = {};
