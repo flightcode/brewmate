@@ -6,7 +6,7 @@ import { api } from "../utils";
 const Login: React.FC = () => {
   const navigate = useNavigate();
 
-  const login = (e: React.FormEvent<HTMLFormElement>): void => {
+  const logIn = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     const target = e.target as typeof e.target & {
@@ -42,7 +42,7 @@ const Login: React.FC = () => {
   return (
     <div>
       <p>Log In</p>
-      <Form onSubmit={(event) => login(event)}>
+      <Form onSubmit={(event) => logIn(event)}>
         <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
