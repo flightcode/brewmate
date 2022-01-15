@@ -52,7 +52,8 @@
     "react/prop-types": "off",
     "react/function-component-definition": "off",
     "no-underscore-dangle": "off",
-    "react/destructuring-assignment": "off"
+    "react/destructuring-assignment": "off",
+    "no-param-reassign": "off"
   },
   "settings": {
     "import/resolver": {
