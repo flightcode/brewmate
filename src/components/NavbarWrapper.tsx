@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { api } from "../utils";
 
 const NavbarWrapper: React.FC = () => {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
+
+  const logOut = (): void => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   useEffect(() => {
     api.get("/user/isAuth").then((res) => {
@@ -48,9 +56,7 @@ const NavbarWrapper: React.FC = () => {
               <LinkContainer to={`/user/${username}`}>
                 <Nav.Link>Dashboard</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/logout">
-                <Nav.Link>Log Out</Nav.Link>
-              </LinkContainer>
+              <Nav.Link onClick={logOut}>Log Out</Nav.Link>
             </Nav>
           ) : (
             <Nav>
