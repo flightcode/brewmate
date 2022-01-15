@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-const Brewery = require("../controllers/beer");
+const Brewery = require("../controllers/brewery");
 
 router.get("/brewery", Brewery.getAll);
 router.get("/brewery/:id", Brewery.getById);
