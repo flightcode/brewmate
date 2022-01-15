@@ -18,7 +18,7 @@ const Register: React.FC = () => {
     const user = {
       name: target.name.value,
       email: target.email.value,
-      password: target.email.value,
+      password: target.password.value,
     };
 
     api
@@ -28,23 +28,19 @@ const Register: React.FC = () => {
         password: user.password,
       })
       .then((res) => {
-        if (res) {
-          navigate("/dashboard");
+        if (res.status === 200) {
+          navigate("/login");
         }
-      })
-      .catch((err) => console.error(err));
+      });
   };
 
   useEffect(() => {
-    api
-      .get("/user/isAuth")
-      .then((res) => {
-        if (res.data.username) {
-          navigate("/dashboard");
-        }
-      })
-      .catch((err) => console.error(err));
-  }, [""]);
+    api.get("/user/isAuth").then((res) => {
+      if (res.status === 200) {
+        navigate("/dashboard");
+      }
+    });
+  });
   return (
     <div>
       <p>Register</p>
