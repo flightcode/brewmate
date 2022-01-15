@@ -54,7 +54,7 @@ const NavbarWrapper: React.FC = () => {
           {username ? (
             <Nav>
               <LinkContainer to="/dashboard">
-                <Nav.Link>Dashboard</Nav.Link>
+                <Nav.Link>Welcome {username}</Nav.Link>
               </LinkContainer>
               <Nav.Link onClick={logOut}>Log Out</Nav.Link>
             </Nav>
