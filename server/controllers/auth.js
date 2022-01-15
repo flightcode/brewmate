@@ -37,7 +37,6 @@ exports.logIn = (req, res) => {
       if (!isMatch) {
         return res.status(403).json({ errors: [{ password: "incorrect" }] });
       }
-
       jwt.sign(
         { id: data._id },
         process.env.TOKEN_SECRET,
@@ -50,7 +49,7 @@ exports.logIn = (req, res) => {
           if (token) {
             return res
               .status(200)
-              .json({ message: "success", token: `Bearer ${token}` });
+              .json({ message: "success", token: `${token}` });
           }
         }
       );
@@ -100,7 +99,7 @@ exports.register = async (req, res) => {
     .then(() => {
       return res.status(200).json({
         success: true,
-        message: "user created",
+        message: "success",
       });
     })
     .catch((err) => {
