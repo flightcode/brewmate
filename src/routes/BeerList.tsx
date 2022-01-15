@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { api } from "../utils";
 import { BeerCard } from "../components";
 
@@ -16,30 +17,63 @@ interface Beer {
 }
 
 const BeerList: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   const [beers, setBeers] = useState([]);
 
+  const search = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+
+    const target = e.target as typeof e.target & {
+      searchTerm: { value: string };
+    };
+
+    setSearchTerm(target.searchTerm.value);
+  };
+
   useEffect(() => {
-    api
-      .get("/beer")
-      .then((res) => {
+    if (searchTerm) {
+      api.get(`/beers/${searchTerm}`).then((res) => {
         if (res.data) {
           setBeers(res.data);
-          console.log(res.data);
         }
-      })
-      .catch((err) => console.log(err));
-  }, [""]);
+      });
+    } else {
+      api.get("/beers").then((res) => {
+        if (res.data) {
+          setBeers(res.data);
+        }
+      });
+    }
+  });
 
   return (
     <div>
       <Helmet>
         <title>Beers - BrewMate</title>
       </Helmet>
+      <Row xs={1} md={2} lg={3}>
+        <Col>
+          <Form onSubmit={(event) => search(event)}>
+            <Form.Group className="mb-3" controlId="formSearch">
+              <Form.Control
+                required
+                type="text"
+                name="searchTerm"
+                placeholder="Search Beers..."
+              />
+            </Form.Group>
+          </Form>
+        </Col>
+        <Col>
+          <LinkContainer to="/beer/new">
+            <Button variant="primary">New</Button>
+          </LinkContainer>
+        </Col>
+      </Row>
       <Row xs={1} md={2} lg={3} xl={4} className="g-4">
         {beers.map((beer: Beer) => (
-          <Col>
+          <Col key={beer._id}>
             <BeerCard
-              key={beer._id}
               name={beer.name}
               brewery={beer.brewery}
               type={beer.type}
