@@ -15,7 +15,7 @@ exports.verifyToken = (req, res, next) => {
     }
 
     req.user = {};
-    req.user.id = decoded.id;
+    req.params.id = decoded.id;
     next();
   });
 };
