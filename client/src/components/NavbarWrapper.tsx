@@ -18,7 +18,6 @@ const NavbarWrapper: React.FC = () => {
     api.get("/user/isAuth").then((res) => {
       if (res.status === 200) {
         setUsername(res.data.name);
-        console.log(res.data.name);
       }
     });
   });
