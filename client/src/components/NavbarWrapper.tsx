@@ -52,7 +52,7 @@ const NavbarWrapper: React.FC = () => {
           </Nav>
           {username ? (
             <Nav>
-              <LinkContainer to={`/user/${username}`}>
+              <LinkContainer to="/dashboard">
                 <Nav.Link>Dashboard</Nav.Link>
               </LinkContainer>
               <Nav.Link onClick={logOut}>Log Out</Nav.Link>
