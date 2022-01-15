@@ -6,6 +6,19 @@ exports.getAll = (req, res, next) => {
     .catch(next);
 };
 
+exports.search = (req, res, next) => {
+  Beer.find({
+    $or: [
+      {
+        name: { $regex: req.params.search },
+        type: { $regex: req.params.search },
+      },
+    ],
+  })
+    .then((data) => res.json(data))
+    .catch(next);
+};
+
 exports.getById = (req, res, next) => {
   Beer.findById({ _id: req.params.id })
     .then((data) => res.json(data))
