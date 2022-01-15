@@ -8,11 +8,11 @@ const NavbarWrapper: React.FC = () => {
 
   useEffect(() => {
     api
-      .get("/auth/isAuth")
+      .get("/user/isAuth")
       .then((res) => {
-        if (res.data) {
-          setUsername(res.data);
-          console.log(res.data);
+        if (res.data.name) {
+          setUsername(res.data.name);
+          console.log(res.data.name);
         }
       })
       .catch((err) => console.error(err));
