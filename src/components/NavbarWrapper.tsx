@@ -11,6 +11,7 @@ const NavbarWrapper: React.FC = () => {
 
   const logOut = (): void => {
     localStorage.removeItem("token");
+    setUsername("");
     navigate("/");
   };
 
