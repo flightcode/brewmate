@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, FloatingLabel } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { api } from "../utils";
 
@@ -43,23 +43,29 @@ const Login: React.FC = () => {
     <div>
       <p>Log In</p>
       <Form onSubmit={(event) => logIn(event)}>
-        <Form.Group className="mb-3" controlId="formEmail">
-          <Form.Label>Email address</Form.Label>
+        <FloatingLabel
+          className="mb-3"
+          controlId="formEmail"
+          label="Email address"
+        >
           <Form.Control
             required
             type="email"
             name="email"
             placeholder="Email address"
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formPassword">
-          <Form.Label>Password</Form.Label>
+        </FloatingLabel>
+        <FloatingLabel
+          className="mb-3"
+          controlId="formPassword"
+          label="Password"
+        >
           <Form.Control
             type="password"
             name="password"
             placeholder="Password"
           />
-        </Form.Group>
+        </FloatingLabel>
         <Button variant="primary" type="submit">
           Submit
         </Button>
