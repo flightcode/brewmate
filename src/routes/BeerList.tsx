@@ -72,6 +72,22 @@ const BeerList: React.FC = () => {
     }
   }, [searchParams, setSearchParams]);
 
+  const filterByName = (beer: Beer): boolean => {
+    return beer.name
+      .toLowerCase()
+      .includes((searchParams.get("name") || "").toLowerCase());
+  };
+
+  const filterByType = (beer: Beer): boolean => {
+    if ((searchParams.get("type") || "") === "") {
+      return true;
+    }
+    return beer.type
+      .toLowerCase()
+      .split(" ")
+      .includes((searchParams.get("type") || "").toLowerCase());
+  };
+
   return (
     <div>
       <Helmet>
@@ -105,16 +121,8 @@ const BeerList: React.FC = () => {
 
       <Row xs={1} md={2} lg={3} xl={4}>
         {beers
-          .filter((beer: Beer) =>
-            beer.name
-              .toLowerCase()
-              .includes((searchParams.get("name") || "").toLowerCase())
-          )
-          .filter((beer: Beer) =>
-            beer.type
-              .toLowerCase()
-              .includes((searchParams.get("type") || "").toLowerCase())
-          )
+          .filter(filterByName)
+          .filter(filterByType)
           .map((beer: Beer) => (
             <Col key={beer._id}>
               <BeerCard
