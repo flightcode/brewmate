@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { BsSearch } from "react-icons/bs";
-import { Row, Col, Form, InputGroup } from "react-bootstrap";
+import { Row, Col, Form, InputGroup, Alert } from "react-bootstrap";
 import {
   createSearchParams,
   useNavigate,
@@ -129,6 +129,9 @@ const BeerList: React.FC = () => {
             </Col>
           ))}
       </Row>
+      <Alert variant="secondary" className="mt-3">
+        Not found? <Alert.Link>Add a new beer</Alert.Link>.
+      </Alert>
     </div>
   );
 };
