@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { BsSearch } from "react-icons/bs";
 import { Row, Col, Form, InputGroup } from "react-bootstrap";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { api } from "../utils";
 import { BeerCard } from "../components";
 
@@ -17,15 +22,9 @@ interface Beer {
 }
 
 const BeerList: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [beers, setBeers] = useState([]);
+  const navigate = useNavigate();
 
-  const search = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    const target = e.target as typeof e.target;
-    setSearchTerm(target.value);
-  };
+  const [beers, setBeers] = useState([]);
 
   useEffect(() => {
     api.get("/beer").then((res) => {
@@ -34,6 +33,44 @@ const BeerList: React.FC = () => {
       }
     });
   }, []);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleSearch = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ): void => {
+    const target = e.target as typeof e.target;
+
+    const newParams: { [key: string]: string } = {};
+    searchParams.forEach((value, key) => {
+      newParams[key] = value;
+    });
+
+    newParams[target.name] = target.value;
+
+    setSearchParams(newParams);
+  };
+
+  useEffect(() => {
+    const newParams = new URLSearchParams();
+    searchParams.forEach((value, key) => {
+      if (value !== "") {
+        newParams.set(key, value);
+      }
+    });
+
+    if (newParams.toString() !== searchParams.toString()) {
+      setSearchParams(newParams);
+      navigate(
+        {
+          search: createSearchParams(newParams).toString(),
+        },
+        { replace: true }
+      );
+    }
+  }, [searchParams, setSearchParams]);
 
   return (
     <div>
@@ -46,14 +83,38 @@ const BeerList: React.FC = () => {
         </InputGroup.Text>
         <Form.Control
           type="text"
-          name="searchTerm"
+          name="name"
           placeholder="Search Beers"
-          onChange={(event) => search(event)}
+          value={searchParams.get("name") || ""}
+          onChange={(event) => handleSearch(event)}
         />
+        <Form.Select
+          aria-label="Search Types"
+          name="type"
+          value={searchParams.get("type")?.toLowerCase() || ""}
+          onChange={(event) => handleSearch(event)}
+        >
+          <option value="">Types</option>
+          <option value="ale">Ale</option>
+          <option value="lager">Lager</option>
+          <option value="porter">Porter</option>
+          <option value="stout">Stout</option>
+          <option value="sour">Sour</option>
+        </Form.Select>
       </InputGroup>
+
       <Row xs={1} md={2} lg={3} xl={4}>
         {beers
-          .filter((beer: Beer) => beer.name.includes(searchTerm))
+          .filter((beer: Beer) =>
+            beer.name
+              .toLowerCase()
+              .includes((searchParams.get("name") || "").toLowerCase())
+          )
+          .filter((beer: Beer) =>
+            beer.type
+              .toLowerCase()
+              .includes((searchParams.get("type") || "").toLowerCase())
+          )
           .map((beer: Beer) => (
             <Col key={beer._id}>
               <BeerCard
