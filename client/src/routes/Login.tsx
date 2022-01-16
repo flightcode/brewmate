@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { Form, Button, FloatingLabel } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { api } from "../utils";
@@ -41,6 +42,9 @@ const Login: React.FC = () => {
   });
   return (
     <div>
+      <Helmet>
+        <title>Log In - BrewMate</title>
+      </Helmet>
       <p>Log In</p>
       <Form onSubmit={(event) => logIn(event)}>
         <FloatingLabel

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { Form, Button, FloatingLabel } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { api } from "../utils";
@@ -43,6 +44,9 @@ const Register: React.FC = () => {
   });
   return (
     <div>
+      <Helmet>
+        <title>Register - BrewMate</title>
+      </Helmet>
       <p>Register</p>
       <Form onSubmit={(event) => register(event)}>
         <FloatingLabel className="mb-3" controlId="formName" label="Username">
