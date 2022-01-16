@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Row, Col, Form, FloatingLabel } from "react-bootstrap";
+import { BsSearch } from "react-icons/bs";
+import { Row, Col, Form, InputGroup } from "react-bootstrap";
 import { api } from "../utils";
 import { BeerCard } from "../components";
 
@@ -23,7 +24,6 @@ const BeerList: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const target = e.target as typeof e.target;
-
     setSearchTerm(target.value);
   };
 
@@ -40,15 +40,18 @@ const BeerList: React.FC = () => {
       <Helmet>
         <title>Beers - BrewMate</title>
       </Helmet>
-      <FloatingLabel className="mb-3" label="Search beers">
+      <InputGroup className="mb-3">
+        <InputGroup.Text>
+          <BsSearch />
+        </InputGroup.Text>
         <Form.Control
           type="text"
           name="searchTerm"
           placeholder="Search Beers"
           onChange={(event) => search(event)}
         />
-      </FloatingLabel>
-      <Row xs={1} md={2} lg={3} xl={4} className="g-4">
+      </InputGroup>
+      <Row xs={1} md={2} lg={3} xl={4}>
         {beers
           .filter((beer: Beer) => beer.name.includes(searchTerm))
           .map((beer: Beer) => (
