@@ -47,11 +47,7 @@ const Login: React.FC = () => {
       </Helmet>
       <p>Log In</p>
       <Form onSubmit={(event) => logIn(event)}>
-        <FloatingLabel
-          className="mb-3"
-          controlId="formEmail"
-          label="Email address"
-        >
+        <FloatingLabel className="mb-3" label="Email address">
           <Form.Control
             required
             type="email"
@@ -59,11 +55,7 @@ const Login: React.FC = () => {
             placeholder="Email address"
           />
         </FloatingLabel>
-        <FloatingLabel
-          className="mb-3"
-          controlId="formPassword"
-          label="Password"
-        >
+        <FloatingLabel className="mb-3" label="Password">
           <Form.Control
             type="password"
             name="password"
