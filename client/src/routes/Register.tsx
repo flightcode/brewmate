@@ -49,7 +49,7 @@ const Register: React.FC = () => {
       </Helmet>
       <p>Register</p>
       <Form onSubmit={(event) => register(event)}>
-        <FloatingLabel className="mb-3" controlId="formName" label="Username">
+        <FloatingLabel className="mb-3" label="Username">
           <Form.Control
             required
             type="text"
@@ -57,11 +57,7 @@ const Register: React.FC = () => {
             placeholder="Username"
           />
         </FloatingLabel>
-        <FloatingLabel
-          className="mb-3"
-          controlId="formEmail"
-          label="Email address"
-        >
+        <FloatingLabel className="mb-3" label="Email address">
           <Form.Control
             required
             type="email"
@@ -72,11 +68,7 @@ const Register: React.FC = () => {
             We&apos;ll never share your email with anyone else.
           </Form.Text>
         </FloatingLabel>
-        <FloatingLabel
-          className="mb-3"
-          controlId="formPassword"
-          label="Password"
-        >
+        <FloatingLabel className="mb-3" label="Password">
           <Form.Control
             type="password"
             name="password"
