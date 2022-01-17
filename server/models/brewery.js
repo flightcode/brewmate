@@ -6,7 +6,6 @@ const BrewerySchema = new Schema(
   {
     name: { type: String, required: true },
     country: String,
-    website: String,
   },
   { timestamps: true }
 );
