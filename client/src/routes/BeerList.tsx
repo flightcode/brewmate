@@ -10,17 +10,7 @@ import {
 import { LinkContainer } from "react-router-bootstrap";
 import { api } from "../utils";
 import { BeerCard } from "../components";
-
-interface Beer {
-  _id: string;
-  name: string;
-  brewery: string;
-  type: string;
-  hops: string[];
-  malts: string[];
-  abv: number;
-  ibu: number;
-}
+import { Beer } from "../models";
 
 const BeerList: React.FC = () => {
   const navigate = useNavigate();
