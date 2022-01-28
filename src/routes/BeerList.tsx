@@ -7,6 +7,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import { api } from "../utils";
 import { BeerCard } from "../components";
 
@@ -138,7 +139,11 @@ const BeerList: React.FC = () => {
           ))}
       </Row>
       <Alert variant="secondary" className="mt-3">
-        Not found? <Alert.Link>Add a new beer</Alert.Link>.
+        Not found?{" "}
+        <LinkContainer to="/beer/new">
+          <Alert.Link>Add a new beer</Alert.Link>
+        </LinkContainer>
+        .
       </Alert>
     </div>
   );
