@@ -1,5 +1,5 @@
 export interface Brewery {
-  id?: any | null;
+  _id?: any | null;
   name: string;
   country?: string;
 }
