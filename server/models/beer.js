@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const BeerSchema = new Schema(
   {
     name: { type: String, required: true },
-    brewery: Number,
+    brewery: String,
     type: { type: String, required: true },
     hops: [String],
     malts: [String],
