@@ -1,5 +1,5 @@
 export interface Beer {
-  id?: any | null;
+  _id?: any | null;
   name: string;
   brewery?: string;
   type: string;
