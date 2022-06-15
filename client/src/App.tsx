@@ -4,10 +4,12 @@ import { Container } from "react-bootstrap";
 import {
   Home,
   BeerList,
+  BeerInfo,
   Login,
   Register,
   Dashboard,
   PrivacyPolicy,
+  NewBeer,
 } from "./routes";
 import { NavbarWrapper, FooterWrapper } from "./components";
 
@@ -18,7 +20,11 @@ const App: React.FC = () => (
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
-          <Route path="beer" element={<BeerList />} />
+          <Route path="beer">
+            <Route index element={<BeerList />} />
+            <Route path="new" element={<NewBeer />} />
+            <Route path=":id" element={<BeerInfo />} />
+          </Route>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="dashboard" element={<Dashboard />} />
