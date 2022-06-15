@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useQueryClient } from "react-query";
 import { BsSearch } from "react-icons/bs";
 import { Row, Col, Form, InputGroup, Alert } from "react-bootstrap";
 import {
@@ -11,11 +12,30 @@ import { LinkContainer } from "react-router-bootstrap";
 import { api } from "../utils";
 import { BeerCard } from "../components";
 import { Beer } from "../models";
+import { BeerService } from "../services";
 
 const BeerList: React.FC = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [beers, setBeers] = useState([]);
+
+  const { isLoading: isLoadingBeers, refetch: getAllBeers } = useQuery<
+    Beer,
+    Error
+  >(
+    "query-beers",
+    async () => {
+      return BeerService.findAll();
+    },
+    {
+      enabled: false,
+      retry: 1,
+      onSuccess: (res) => {
+        setBeers(res);
+      },
+    }
+  );
 
   useEffect(() => {
     api.get("/beer").then((res) => {
@@ -118,12 +138,12 @@ const BeerList: React.FC = () => {
             <Col key={beer._id}>
               <BeerCard
                 name={beer.name}
-                brewery={beer.brewery}
+                brewery={beer.brewery || ""}
                 type={beer.type}
-                hops={beer.hops}
-                malts={beer.malts}
-                abv={beer.abv}
-                ibu={beer.ibu}
+                hops={beer.hops || []}
+                malts={beer.malts || []}
+                abv={beer.abv || 0}
+                ibu={beer.ibu || 0}
               />
             </Col>
           ))}
