@@ -1,0 +1,38 @@
+{
+  "name": "brewmate-server",
+  "version": "0.1.0",
+  "description": "MongoDB API Server for BrewMate",
+  "author": "flightcode",
+  "license": "GPL-3.0",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "parcel build",
+    "dev": "npx nodemon src/index.ts"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.8",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.15",
+    "parcel": "^2.6.0",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  }
+}
