@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
+import { model, Schema } from "mongoose";
+import { TBeer } from "../models/beer";
 
-const { Schema } = mongoose;
-
-const BeerSchema = new Schema(
+const SBeer = new Schema<TBeer>(
   {
     name: { type: String, required: true },
     brewery: String,
@@ -15,6 +14,6 @@ const BeerSchema = new Schema(
   { timestamps: true }
 );
 
-const Beer = mongoose.model("beer", BeerSchema);
+const MBeer = model<TBeer>("Beer", SBeer);
 
-module.exports = Beer;
+export default MBeer;

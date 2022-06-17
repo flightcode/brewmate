@@ -1,41 +1,32 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import { Request, Response } from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { AuthenticatedRequest } from "../utils/auth";
+import User from "../schemas/user";
 
-require("dotenv").config();
+export function getSelf(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
 
-const User = require("../models/user");
+  User.findOne({ _id: authReq.userId }, "-password")
+    .then((data) => res.status(200).json(data))
+    .catch(() => res.status(400));
+}
 
-exports.isAuth = (req, res) => {
-  User.findOne({ _id: req.params.id }, "name -_id").then((data) =>
-    res.json(data)
-  );
-};
-
-exports.logIn = (req, res) => {
+export function logIn(req: Request, res: Response) {
   const { email, password } = req.body;
 
-  const errors = [];
-
-  if (!email) {
-    errors.push({ email: "required" });
-  }
-
-  if (!password) {
-    errors.push({ password: "required" });
-  }
-
-  if (errors.length > 0) {
-    return res.status(422).json({ errors });
+  if (!email || !password) {
+    return res.status(422).json({ credentials: "invalid" });
   }
 
   User.findOne({ email }).then((data) => {
     if (!data) {
-      return res.status(404).json({ errors: [{ email: "not found" }] });
+      return res.status(422).json({ credentials: "invalid" });
     }
 
     bcrypt.compare(password, data.password).then((isMatch) => {
       if (!isMatch) {
-        return res.status(403).json({ errors: [{ password: "incorrect" }] });
+        return res.status(422).json({ credentials: "invalid" });
       }
       jwt.sign(
         { id: data._id },
@@ -55,35 +46,21 @@ exports.logIn = (req, res) => {
       );
     });
   });
-};
+}
 
-exports.register = async (req, res) => {
+export async function register(req: Request, res: Response) {
   const { name, email, password } = req.body;
 
-  const errors = [];
-
-  if (!name) {
-    errors.push({ name: "required" });
-  }
-
-  if (!email) {
-    errors.push({ email: "required" });
-  }
-
-  if (!password) {
-    errors.push({ password: "required" });
+  if (!name || !email || !password) {
+    return res.status(422).json({ credentials: "invalid" });
   }
 
   if (await User.exists({ name })) {
-    errors.push({ name: "already exists" });
+    return res.status(422).json({ credentials: "invalid" });
   }
 
   if (await User.exists({ email })) {
-    errors.push({ email: "already exists" });
-  }
-
-  if (errors.length > 0) {
-    return res.status(422).json({ errors });
+    return res.status(422).json({ credentials: "invalid" });
   }
 
   const user = new User({
@@ -107,4 +84,4 @@ exports.register = async (req, res) => {
         errors: err,
       });
     });
-};
+}
