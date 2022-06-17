@@ -1,6 +1,5 @@
-# brewmate-client
-
-This template should help get you started developing with Vue 3 in Vite.
+# BrewMate
+Beer-tasting Web App. Created in Vue and Express/MongoDB.
 
 ## Recommended IDE Setup
 
