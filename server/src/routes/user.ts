@@ -4,8 +4,10 @@ import * as User from "../controllers/user";
 
 const router = express.Router();
 
-router.get("/user", verifyToken, User.getSelf);
-router.post("/user/login", User.logIn);
-router.post("/user/register", User.register);
+router.post("/login", User.logIn);
+router.post("/register", User.register);
+router.get("/", verifyToken, User.getSelf);
+// router.patch("/", verifyToken, User.updateSelf);
+// router.delete("/", verifyToken, User.deleteSelf);
 
 export default router;
