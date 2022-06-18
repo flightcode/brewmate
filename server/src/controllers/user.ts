@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import validate from "deep-email-validator";
 import { AuthenticatedRequest } from "../utils/auth";
+import { checkStrength } from "../utils/passwordStrength";
 import User from "../schemas/user";
 import APIError from "../utils/error";
 
@@ -75,6 +77,34 @@ export async function register(req: Request, res: Response) {
       "UnprocessableError",
       req,
       "Credentials incomplete"
+    ).sendResponse(res);
+  }
+
+  // Check email valid
+  const emailCheck = await validate({
+    email: email,
+    validateRegex: true,
+    validateMx: true,
+    validateTypo: false,
+    validateDisposable: false,
+    validateSMTP: false,
+  });
+  if (!emailCheck.valid) {
+    return new APIError(
+      "UnprocessableError",
+      req,
+      "Email invalid"
+    ).sendResponse(res);
+  }
+
+  // Check password strength
+  const passwordStrength = checkStrength(password);
+  console.log(passwordStrength);
+  if (!passwordStrength.strong) {
+    return new APIError(
+      "UnprocessableError",
+      req,
+      "Password weak"
     ).sendResponse(res);
   }
 
