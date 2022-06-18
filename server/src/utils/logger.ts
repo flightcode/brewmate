@@ -16,7 +16,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
   const currentDate = dayjs().utc().format("YYYY-MM-DD HH:mm:ss");
   const method = req.method;
   const url = req.url;
-  const status = req.statusCode;
+  const status = res.statusCode;
   const log = `[${chalk.blue(currentDate)}] ${method}:${url} ${status}`;
   console.log(log);
   next();
