@@ -3,44 +3,62 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AuthenticatedRequest } from "../utils/auth";
 import User from "../schemas/user";
+import APIError from "../utils/error";
 
 export function getSelf(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
 
-  User.findOne({ _id: authReq.userId }, "-password")
+  User.findById(authReq.userId, "-password")
     .then((data) => res.status(200).json(data))
-    .catch(() => res.status(400));
+    .catch(() => res.status(500));
 }
 
 export function logIn(req: Request, res: Response) {
   const { email, password } = req.body;
 
+  // Check fields
   if (!email || !password) {
-    return res.status(422).json({ credentials: "invalid" });
+    return new APIError(
+      "UnprocessableError",
+      req,
+      "Credentials incomplete"
+    ).sendResponse(res);
   }
 
+  // Check user exists
   User.findOne({ email }).then((data) => {
     if (!data) {
-      return res.status(422).json({ credentials: "invalid" });
+      return new APIError(
+        "UnprocessableError",
+        req,
+        "User doesn't exist"
+      ).sendResponse(res);
     }
 
+    // Check password correct
     bcrypt.compare(password, data.password).then((isMatch) => {
       if (!isMatch) {
-        return res.status(422).json({ credentials: "invalid" });
+        return new APIError(
+          "UnprocessableError",
+          req,
+          "Password incorrect"
+        ).sendResponse(res);
       }
+
+      // Sign JWT
       jwt.sign(
         { id: data._id },
         process.env.TOKEN_SECRET,
         { expiresIn: 3600 },
         (err, token) => {
           if (err) {
-            return res.status(500).json({ errors: err });
+            return new APIError("InternalError", req, err.message).sendResponse(
+              res
+            );
           }
 
           if (token) {
-            return res
-              .status(200)
-              .json({ message: "success", token: `${token}` });
+            return res.status(200).json({ token: `${token}` });
           }
         }
       );
@@ -51,16 +69,29 @@ export function logIn(req: Request, res: Response) {
 export async function register(req: Request, res: Response) {
   const { name, email, password } = req.body;
 
+  // Check fields
   if (!name || !email || !password) {
-    return res.status(422).json({ credentials: "invalid" });
+    return new APIError(
+      "UnprocessableError",
+      req,
+      "Credentials incomplete"
+    ).sendResponse(res);
   }
 
+  // Check user doesn't already exist
   if (await User.exists({ name })) {
-    return res.status(422).json({ credentials: "invalid" });
+    return new APIError(
+      "UnprocessableError",
+      req,
+      "Username already exists"
+    ).sendResponse(res);
   }
-
   if (await User.exists({ email })) {
-    return res.status(422).json({ credentials: "invalid" });
+    return new APIError(
+      "UnprocessableError",
+      req,
+      "Email already exists"
+    ).sendResponse(res);
   }
 
   const user = new User({
@@ -69,19 +100,15 @@ export async function register(req: Request, res: Response) {
     password,
   });
 
+  // Encrypt password
   user.password = await bcrypt.hash(user.password, 10);
 
   user
     .save()
     .then(() => {
-      return res.status(200).json({
-        success: true,
-        message: "success",
-      });
+      return res.status(200).send();
     })
-    .catch((err) => {
-      return res.status(500).json({
-        errors: err,
-      });
+    .catch((err: Error) => {
+      return new APIError("InternalError", req, err.message).sendResponse(res);
     });
 }
