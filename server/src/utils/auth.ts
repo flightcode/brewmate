@@ -6,6 +6,14 @@ export type AuthenticatedRequest = Request & {
   userId: string;
 };
 
+/**
+ * Middleware function to verify JWT
+ *
+ * @param req Request
+ * @param res Response
+ * @param next Function to call after log
+ * @returns authReq AuthenticatedRequest with userId
+ */
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization?.split(" ")[1];
 

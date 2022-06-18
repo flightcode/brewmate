@@ -1,6 +1,9 @@
 import { model, Schema } from "mongoose";
 import { TBeer } from "../models/beer";
 
+/**
+ * Schema representing Beer in database
+ */
 const SBeer = new Schema<TBeer>(
   {
     name: { type: String, required: true },
@@ -14,6 +17,9 @@ const SBeer = new Schema<TBeer>(
   { timestamps: true }
 );
 
+/**
+ * Model representing Beer in database
+ */
 const MBeer = model<TBeer>("Beer", SBeer);
 
 export default MBeer;
