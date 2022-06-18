@@ -12,7 +12,9 @@ export function getSelf(req: Request, res: Response) {
 
   User.findById(authReq.userId, "-password")
     .then((data) => res.status(200).json(data))
-    .catch(() => res.status(500));
+    .catch((err: Error) => {
+      return new APIError("InternalError", req, err.message).sendResponse(res);
+    });
 }
 
 export function logIn(req: Request, res: Response) {
