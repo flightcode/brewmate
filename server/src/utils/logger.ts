@@ -13,12 +13,21 @@ dayjs.extend(utc);
  * @param next Function to call after log
  */
 const logger = (req: Request, res: Response, next: NextFunction) => {
-  const currentDate = dayjs().utc().format("YYYY-MM-DD HH:mm:ss");
+  const startDT = dayjs().utc();
+  const currentDate = startDT.format("YYYY-MM-DD HH:mm:ss");
   const method = req.method;
   const url = req.url;
-  const status = res.statusCode;
-  const log = `[${chalk.blue(currentDate)}] ${method}:${url} ${status}`;
-  console.log(log);
+  res.on("finish", () => {
+    const finishDT = dayjs().utc();
+    const duration = finishDT.diff(startDT);
+    const status = res.statusCode;
+    const log = `[${chalk.blue(
+      currentDate
+    )}] ${method}:${url} ${status} (${chalk.green(
+      duration.toString() + "ms"
+    )})`;
+    console.log(log);
+  });
   next();
 };
 
