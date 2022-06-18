@@ -3,8 +3,8 @@ import { TUser } from "src/models/user";
 
 const SUser = new Schema<TUser>(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
   },
   { timestamps: true }
