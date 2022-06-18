@@ -16,7 +16,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
   const startDT = dayjs().utc();
   const currentDate = startDT.format("YYYY-MM-DD HH:mm:ss");
   const method = req.method;
-  const url = req.url;
+  const url = req.originalUrl;
   res.on("finish", () => {
     const finishDT = dayjs().utc();
     const duration = finishDT.diff(startDT);
