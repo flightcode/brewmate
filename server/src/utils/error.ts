@@ -15,7 +15,9 @@ export type ErrorResponse = Response & { logMessage?: string };
  * @param obj
  * @returns obj is ErrorResponse
  */
-export function instanceOfErrorResponse(obj: any): obj is ErrorResponse {
+export function instanceOfErrorResponse(
+  obj: Response | ErrorResponse
+): obj is ErrorResponse {
   return "logMessage" in obj;
 }
 
