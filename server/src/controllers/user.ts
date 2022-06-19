@@ -13,7 +13,7 @@ export function getSelf(req: Request, res: Response) {
   User.findById(authReq.userId, "-password")
     .then((data) => res.status(200).json(data))
     .catch((err: Error) => {
-      return new APIError("InternalError", req, err.message).sendResponse(res);
+      return new APIError("InternalError", err.message).sendResponse(res);
     });
 }
 
@@ -24,7 +24,6 @@ export function logIn(req: Request, res: Response) {
   if (!email || !password) {
     return new APIError(
       "UnprocessableError",
-      req,
       "Credentials incomplete"
     ).sendResponse(res);
   }
@@ -34,7 +33,6 @@ export function logIn(req: Request, res: Response) {
     if (!data) {
       return new APIError(
         "UnprocessableError",
-        req,
         "User doesn't exist"
       ).sendResponse(res);
     }
@@ -44,7 +42,6 @@ export function logIn(req: Request, res: Response) {
       if (!isMatch) {
         return new APIError(
           "UnprocessableError",
-          req,
           "Password incorrect"
         ).sendResponse(res);
       }
@@ -56,9 +53,7 @@ export function logIn(req: Request, res: Response) {
         { expiresIn: 3600 },
         (err, token) => {
           if (err) {
-            return new APIError("InternalError", req, err.message).sendResponse(
-              res
-            );
+            return new APIError("InternalError", err.message).sendResponse(res);
           }
 
           if (token) {
@@ -77,7 +72,6 @@ export async function register(req: Request, res: Response) {
   if (!name || !email || !password) {
     return new APIError(
       "UnprocessableError",
-      req,
       "Credentials incomplete"
     ).sendResponse(res);
   }
@@ -92,36 +86,29 @@ export async function register(req: Request, res: Response) {
     validateSMTP: false,
   });
   if (!emailCheck.valid) {
-    return new APIError(
-      "UnprocessableError",
-      req,
-      "Email invalid"
-    ).sendResponse(res);
+    return new APIError("UnprocessableError", "Email invalid").sendResponse(
+      res
+    );
   }
 
   // Check password strength
   const passwordStrength = checkStrength(password);
-  console.log(passwordStrength);
   if (!passwordStrength.strong) {
-    return new APIError(
-      "UnprocessableError",
-      req,
-      "Password weak"
-    ).sendResponse(res);
+    return new APIError("UnprocessableError", "Password weak").sendResponse(
+      res
+    );
   }
 
   // Check user doesn't already exist
   if (await User.exists({ name })) {
     return new APIError(
       "UnprocessableError",
-      req,
       "Username already exists"
     ).sendResponse(res);
   }
   if (await User.exists({ email })) {
     return new APIError(
       "UnprocessableError",
-      req,
       "Email already exists"
     ).sendResponse(res);
   }
@@ -141,6 +128,6 @@ export async function register(req: Request, res: Response) {
       return res.status(200).send();
     })
     .catch((err: Error) => {
-      return new APIError("InternalError", req, err.message).sendResponse(res);
+      return new APIError("InternalError", err.message).sendResponse(res);
     });
 }
