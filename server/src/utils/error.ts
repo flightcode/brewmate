@@ -1,9 +1,23 @@
-import { Request, Response } from "express";
-import chalk from "chalk";
+import { Response } from "express";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
+
+/**
+ * ErrorResponse instance, including logMessage
+ */
+export type ErrorResponse = Response & { logMessage?: string };
+
+/**
+ * Check if obj is ErrorResponse
+ *
+ * @param obj
+ * @returns obj is ErrorResponse
+ */
+export function instanceOfErrorResponse(obj: any): obj is ErrorResponse {
+  return "logMessage" in obj;
+}
 
 /**
  * API Error
@@ -15,29 +29,27 @@ export default class APIError {
   logMessage?: string; // Message parsed in log
   source: string; // Request source
 
-  constructor(type: ErrorType, req: Request, logMessage?: string) {
+  constructor(type: ErrorType, logMessage?: string) {
     const data = errors[type];
     this.status = data.status;
     this.message = data.message;
     this.detail = data.detail;
     this.logMessage = logMessage;
-    this.source = `${req.method}:${req.originalUrl}`;
   }
 
   sendResponse(res: Response) {
-    // Log in console/file
-    const currentDate = dayjs().utc().format("YYYY-MM-DD HH:mm:ss");
-    const log = chalk.red(
-      `[${currentDate}] ${this.source} ${this.status} - ${this.logMessage}`
-    );
-    console.log(log);
+    const finalRes = res as ErrorResponse;
+    finalRes.logMessage = this.logMessage;
 
-    res
+    finalRes
       .status(this.status)
       .send({ message: this.message, detail: this.detail });
   }
 }
 
+/**
+ * Different ErrorTypes for API
+ */
 export type ErrorType =
   | "BadRequestError"
   | "UnauthorizedError"
@@ -46,6 +58,9 @@ export type ErrorType =
   | "UnprocessableError"
   | "InternalError";
 
+/**
+ * Data for each ErrorType
+ */
 const errors: {
   [key in ErrorType]: { message: string; detail: string; status: number };
 } = {
