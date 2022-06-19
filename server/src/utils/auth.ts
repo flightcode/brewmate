@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import APIError from "./error";
 
 export type AuthenticatedRequest = Request & {
   userId: string;
@@ -19,7 +20,10 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
 
   // Check token exists
   if (!token) {
-    return res.status(401).json({ token: "invalid" });
+    return new APIError(
+      "UnauthorizedError",
+      "Token doesn't exist"
+    ).sendResponse(res);
   }
 
   // Verify JWT
@@ -29,7 +33,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
     (err, decoded: { id: string }) => {
       // Check JWT valid
       if (err || !decoded.id) {
-        return res.status(401).json({ token: "invalid" });
+        return new APIError("UnauthorizedError", err.message).sendResponse(res);
       }
 
       const authReq = req as AuthenticatedRequest;
