@@ -12,5 +12,7 @@ router.get("/type/:type", Beer.getByType);
 router.post("/", verifyToken, Beer.add);
 router.patch("/:id", verifyToken, Beer.update);
 router.delete("/:id", verifyToken, Beer.remove);
+router.post("/:id/review", verifyToken, Beer.addReview);
+router.delete("/:id/review/:review", verifyToken, Beer.removeReview);
 
 export default router;

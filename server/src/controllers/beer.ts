@@ -1,10 +1,14 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import APIError from "../utils/error";
 import { AuthenticatedRequest } from "../utils/auth";
-import { TBeer } from "../types/beer";
+import { TBeer, TReview } from "../types/beer";
 import Beer from "../schemas/beer";
 import Brewery from "../schemas/brewery";
+
+dayjs.extend(utc);
 
 export function getAll(req: Request, res: Response) {
   Beer.find({})
@@ -247,6 +251,88 @@ export function remove(req: Request, res: Response) {
 
   Beer.findByIdAndDelete(id)
     .then((data: TBeer) => res.status(200).json(data))
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}
+
+export async function addReview(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
+  const { id } = authReq.params;
+  const { date, rating, descriptors } = authReq.body;
+
+  // Check required fields
+  if (isNaN(rating) && rating !== 0 && rating !== 0.5 && rating !== 1) {
+    return new APIError("UnprocessableError", "Rating invalid").sendResponse(
+      res
+    );
+  }
+
+  // Check id
+  if (!ObjectId.isValid(id)) {
+    return new APIError("UnprocessableError", "ID invalid").sendResponse(res);
+  }
+  const beer = await Beer.findById(id);
+  if (!beer) {
+    return new APIError(
+      "UnprocessableError",
+      "Beer does not exist"
+    ).sendResponse(res);
+  }
+
+  let dateTasted: dayjs.Dayjs;
+  if (date) {
+    dateTasted = dayjs(date).utc();
+  } else {
+    dateTasted = dayjs().utc();
+  }
+
+  const arrDescriptors = Array.isArray(descriptors)
+    ? descriptors
+    : [descriptors];
+
+  const review: TReview = {
+    user: authReq.userId as never,
+    date: dateTasted.toDate(),
+    rating,
+    descriptors: arrDescriptors,
+  };
+
+  beer
+    .updateOne({
+      $push: { reviews: review },
+    })
+    .then(() => {
+      return res.status(200).json(review);
+    })
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}
+
+export async function removeReview(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
+  const { id, review } = authReq.params;
+
+  // Check id
+  if (!ObjectId.isValid(id)) {
+    return new APIError("UnprocessableError", "ID invalid").sendResponse(res);
+  }
+  const beer = await Beer.findById(id);
+  if (!beer) {
+    return new APIError(
+      "UnprocessableError",
+      "Beer does not exist"
+    ).sendResponse(res);
+  }
+
+  beer
+    .updateOne({
+      $pull: { reviews: { _id: review } },
+    })
+    .then(() => {
+      return res.status(200).send();
+    })
     .catch((err: Error) => {
       return new APIError("InternalError", err.message).sendResponse(res);
     });
