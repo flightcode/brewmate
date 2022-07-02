@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { ObjectId } from "mongodb";
 import APIError from "../utils/error";
 import { AuthenticatedRequest } from "../utils/auth";
 import { TBrewery } from "../models/brewery";
@@ -13,7 +14,12 @@ export function getAll(req: Request, res: Response) {
 }
 
 export function getById(req: Request, res: Response) {
-  const id = req.params;
+  const { id } = req.params;
+
+  // Check id
+  if (!ObjectId.isValid(id)) {
+    return new APIError("UnprocessableError", "ID invalid").sendResponse(res);
+  }
 
   Brewery.findById(id)
     .then((data) => res.status(200).json(data))
@@ -22,20 +28,20 @@ export function getById(req: Request, res: Response) {
     });
 }
 
-export function getByCountry(req: Request, res: Response) {
-  const country = req.params;
+export function getByName(req: Request, res: Response) {
+  const { name } = req.params;
 
-  Brewery.find({ country: { $regex: ".*" + country + ".*" } })
+  Brewery.find({ name: { $regex: name, $options: "i" } })
     .then((data) => res.status(200).json(data))
     .catch((err: Error) => {
       return new APIError("InternalError", err.message).sendResponse(res);
     });
 }
 
-export function getByName(req: Request, res: Response) {
-  const name = req.params;
+export function getByCountry(req: Request, res: Response) {
+  const { country } = req.params;
 
-  Brewery.find({ name: { $regex: ".*" + name + ".*" } })
+  Brewery.find({ country: { $regex: country, $options: "i" } })
     .then((data) => res.status(200).json(data))
     .catch((err: Error) => {
       return new APIError("InternalError", err.message).sendResponse(res);
@@ -83,12 +89,22 @@ export async function update(req: Request, res: Response) {
     ).sendResponse(res);
   }
 
+  // Check id
+  if (!ObjectId.isValid(id)) {
+    return new APIError("UnprocessableError", "ID invalid").sendResponse(res);
+  }
+  const brewery = await Brewery.findById(id);
+  if (!brewery) {
+    return new APIError(
+      "UnprocessableError",
+      "Brewery does not exist"
+    ).sendResponse(res);
+  }
+
   // Check fields
   if (!name && !region && !country) {
     return new APIError("UnprocessableError", "Fields empty").sendResponse(res);
   }
-
-  const brewery = await Brewery.findById(id);
 
   // Update name
   if (name) {
@@ -113,7 +129,7 @@ export async function update(req: Request, res: Response) {
     });
 }
 
-export function remove(req: Request, res: Response) {
+export async function remove(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
   const { id } = req.params;
 
@@ -123,6 +139,11 @@ export function remove(req: Request, res: Response) {
       "ForbiddenError",
       "User AuthLevel not admin or moderator"
     ).sendResponse(res);
+  }
+
+  // Check id
+  if (!ObjectId.isValid(id)) {
+    return new APIError("UnprocessableError", "ID invalid").sendResponse(res);
   }
 
   Brewery.findByIdAndDelete(id)
