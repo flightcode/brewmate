@@ -39,6 +39,30 @@ export function getReviews(req: Request, res: Response) {
     });
 }
 
+export function getRatings(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
+  let { user } = req.params;
+
+  if (!user) {
+    user = authReq.userId;
+  }
+
+  Beer.aggregate([
+    { $unwind: "$reviews" },
+    { $match: { "reviews.user": new mongoose.Types.ObjectId(user) } },
+    {
+      $group: {
+        _id: "$_id",
+        average: { $avg: "$reviews.rating" },
+      },
+    },
+  ])
+    .then((data) => res.status(200).json(data))
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}
+
 export async function updateSelf(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
   const { name, email, password } = req.body;
