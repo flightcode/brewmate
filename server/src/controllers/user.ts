@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import validate from "deep-email-validator";
@@ -6,13 +7,33 @@ import APIError from "../utils/error";
 import { AuthenticatedRequest } from "../utils/auth";
 import { checkStrength } from "../utils/passwordStrength";
 import { TUser } from "../types/user";
+import { TBeer } from "../types/beer";
 import User from "../schemas/user";
+import Beer from "../schemas/beer";
 
 export function getSelf(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
 
   User.findById(authReq.userId, "-password")
     .then((data: TUser) => res.status(200).json(data))
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}
+
+export function getReviews(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
+  let { user } = req.params;
+
+  if (!user) {
+    user = authReq.userId;
+  }
+
+  Beer.aggregate([
+    { $unwind: "$reviews" },
+    { $match: { "reviews.user": new mongoose.Types.ObjectId(user) } },
+  ])
+    .then((data: TBeer[]) => res.status(200).json(data))
     .catch((err: Error) => {
       return new APIError("InternalError", err.message).sendResponse(res);
     });

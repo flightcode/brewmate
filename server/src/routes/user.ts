@@ -7,6 +7,8 @@ const router = express.Router();
 router.post("/login", User.logIn);
 router.post("/register", User.register);
 router.get("/", verifyToken, User.getSelf);
+router.get("/reviews", verifyToken, User.getReviews);
+router.get("/:user/reviews", User.getReviews);
 router.patch("/", verifyToken, User.updateSelf);
 router.delete("/", verifyToken, User.deleteSelf);
 
