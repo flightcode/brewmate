@@ -2,16 +2,95 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import validate from "deep-email-validator";
+import APIError from "../utils/error";
 import { AuthenticatedRequest } from "../utils/auth";
 import { checkStrength } from "../utils/passwordStrength";
+import { TUser } from "../models/user";
 import User from "../schemas/user";
-import APIError from "../utils/error";
 
 export function getSelf(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
 
   User.findById(authReq.userId, "-password")
-    .then((data) => res.status(200).json(data))
+    .then((data: TUser) => res.status(200).json(data))
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}
+
+export async function updateSelf(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
+  const { name, email, password } = req.body;
+
+  // Check fields
+  if (!name && !email && !password) {
+    return new APIError("UnprocessableError", "Credentials empty").sendResponse(
+      res
+    );
+  }
+
+  const user = await User.findById(authReq.userId);
+
+  // Update name
+  if (name) {
+    // Check name doesn't already exist
+    if (await User.exists({ name })) {
+      return new APIError(
+        "UnprocessableError",
+        "Username already exists"
+      ).sendResponse(res);
+    }
+
+    user.name = name;
+  }
+
+  // Update email
+  if (email) {
+    // Check email doesn't already exist
+    if (await User.exists({ email })) {
+      return new APIError(
+        "UnprocessableError",
+        "Email already exists"
+      ).sendResponse(res);
+    }
+
+    // Check email valid
+    const emailCheck = await validate({
+      email: email,
+      validateRegex: true,
+      validateMx: true,
+      validateTypo: false,
+      validateDisposable: false,
+      validateSMTP: false,
+    });
+    if (!emailCheck.valid) {
+      return new APIError("UnprocessableError", "Email invalid").sendResponse(
+        res
+      );
+    }
+
+    user.email = email;
+  }
+
+  // Update password
+  if (password) {
+    // Check password strength
+    const passwordStrength = checkStrength(password);
+    if (!passwordStrength.strong) {
+      return new APIError("UnprocessableError", "Password weak").sendResponse(
+        res
+      );
+    }
+
+    // Encrypt password
+    user.password = await bcrypt.hash(password, 10);
+  }
+
+  user
+    .save()
+    .then(() => {
+      return res.status(200).send();
+    })
     .catch((err: Error) => {
       return new APIError("InternalError", err.message).sendResponse(res);
     });
