@@ -1,7 +1,9 @@
+import { TBrewery } from "./brewery";
+
 export type TBeer = {
   _id?: string;
   name: string;
-  brewery?: string;
+  brewery?: TBrewery;
   type: string;
   subType?: string;
   hops?: string[];

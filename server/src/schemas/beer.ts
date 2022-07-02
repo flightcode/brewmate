@@ -7,7 +7,7 @@ import { TBeer } from "../models/beer";
 const SBeer = new Schema<TBeer>(
   {
     name: { type: String, required: true },
-    brewery: String,
+    brewery: { type: Schema.Types.ObjectId, ref: "Brewery" },
     type: { type: String, required: true },
     subType: String,
     hops: [String],
