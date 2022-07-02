@@ -131,3 +131,13 @@ export async function register(req: Request, res: Response) {
       return new APIError("InternalError", err.message).sendResponse(res);
     });
 }
+
+export function deleteSelf(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
+
+  User.findByIdAndDelete(authReq.userId)
+    .then(() => res.status(200).send())
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}

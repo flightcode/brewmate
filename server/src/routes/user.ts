@@ -8,6 +8,6 @@ router.post("/login", User.logIn);
 router.post("/register", User.register);
 router.get("/", verifyToken, User.getSelf);
 // router.patch("/", verifyToken, User.updateSelf);
-// router.delete("/", verifyToken, User.deleteSelf);
+router.delete("/", verifyToken, User.deleteSelf);
 
 export default router;
