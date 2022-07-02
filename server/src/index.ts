@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import sanitize from "express-mongo-sanitize";
 import logger from "./utils/logger";
 import User from "./routes/user";
 import Beer from "./routes/beer";
@@ -20,6 +21,7 @@ const server = express();
 
 server.use(cors());
 server.use(express.json());
+server.use(sanitize());
 server.use(logger);
 
 // 404 Catch ALl
