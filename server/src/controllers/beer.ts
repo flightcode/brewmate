@@ -120,6 +120,113 @@ export async function add(req: Request, res: Response) {
     });
 }
 
+export async function update(req: Request, res: Response) {
+  const authReq = req as AuthenticatedRequest;
+  const { id } = req.params;
+  const { name, brewery, type, hops, malts, abv, ibu } = req.body;
+
+  // Check permissions
+  if (authReq.authLevel !== "admin" && authReq.authLevel !== "moderator") {
+    return new APIError(
+      "ForbiddenError",
+      "User AuthLevel not admin or moderator"
+    ).sendResponse(res);
+  }
+
+  // Check id
+  if (!ObjectId.isValid(id)) {
+    return new APIError("UnprocessableError", "ID invalid").sendResponse(res);
+  }
+  const beer = await Beer.findById(id);
+  if (!beer) {
+    return new APIError(
+      "UnprocessableError",
+      "Beer does not exist"
+    ).sendResponse(res);
+  }
+
+  // Check fields
+  if (!name && !brewery && !type && !hops && !malts && !abv && !ibu) {
+    return new APIError("UnprocessableError", "Fields empty").sendResponse(res);
+  }
+
+  // Update name
+  if (name) {
+    beer.name = name;
+  }
+
+  // Update Brewery
+  if (brewery) {
+    // Check brewery
+    if (!ObjectId.isValid(brewery)) {
+      return new APIError(
+        "UnprocessableError",
+        "Brewery ID invalid"
+      ).sendResponse(res);
+    }
+
+    const breweryObj = await Brewery.findById(brewery);
+    if (!breweryObj) {
+      return new APIError(
+        "UnprocessableError",
+        "Brewery does not exist"
+      ).sendResponse(res);
+    }
+
+    beer.brewery = brewery;
+  }
+
+  // Update type
+  if (type) {
+    beer.type = type;
+  }
+
+  // Update ABV
+  if (abv) {
+    const numABV = Number(abv);
+    if (isNaN(numABV) || numABV < 0 || numABV > 100) {
+      return new APIError("UnprocessableError", "ABV invalid").sendResponse(
+        res
+      );
+    }
+
+    beer.abv = abv;
+  }
+
+  // Update IBU
+  if (ibu) {
+    const numIBU = Number(ibu);
+    if (isNaN(numIBU) || numIBU < 0 || numIBU > 100) {
+      return new APIError("UnprocessableError", "IBU invalid").sendResponse(
+        res
+      );
+    }
+
+    beer.ibu = ibu;
+  }
+
+  // Update Hops
+  if (hops) {
+    const arrHops = Array.isArray(hops) ? hops : [hops];
+    beer.hops = arrHops;
+  }
+
+  // Update Malts
+  if (malts) {
+    const arrMalts = Array.isArray(malts) ? malts : [malts];
+    beer.malts = arrMalts;
+  }
+
+  beer
+    .save()
+    .then((data: TBeer) => {
+      return res.status(200).json(data);
+    })
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}
+
 export function remove(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
   const { id } = req.params;
