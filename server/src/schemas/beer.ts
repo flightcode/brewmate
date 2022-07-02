@@ -9,6 +9,7 @@ const SBeer = new Schema<TBeer>(
     name: { type: String, required: true },
     brewery: String,
     type: { type: String, required: true },
+    subType: String,
     hops: [String],
     malts: [String],
     abv: Number,

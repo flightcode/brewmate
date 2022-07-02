@@ -3,6 +3,7 @@ export type TBeer = {
   name: string;
   brewery?: string;
   type: string;
+  subType?: string;
   hops?: string[];
   malts?: string[];
   abv: number;
