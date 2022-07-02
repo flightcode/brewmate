@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -51,6 +52,30 @@ export function getByType(req: Request, res: Response) {
 
   Beer.find({ type })
     .populate("brewery")
+    .then((data) => res.status(200).json(data))
+    .catch((err: Error) => {
+      return new APIError("InternalError", err.message).sendResponse(res);
+    });
+}
+
+export function getRating(req: Request, res: Response) {
+  const { id } = req.params;
+
+  // Check id
+  if (!ObjectId.isValid(id)) {
+    return new APIError("UnprocessableError", "ID invalid").sendResponse(res);
+  }
+
+  Beer.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(id) } },
+    { $unwind: "$reviews" },
+    {
+      $group: {
+        _id: new mongoose.Types.ObjectId(id),
+        average: { $avg: "$reviews.rating" },
+      },
+    },
+  ])
     .then((data) => res.status(200).json(data))
     .catch((err: Error) => {
       return new APIError("InternalError", err.message).sendResponse(res);
