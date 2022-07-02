@@ -2,10 +2,12 @@ import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import APIError from "./error";
+import { AuthLevel } from "../models/user";
 import User from "../schemas/user";
 
 export type AuthenticatedRequest = Request & {
   userId: string;
+  authLevel: AuthLevel;
 };
 
 /**
@@ -48,6 +50,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
       } else {
         const authReq = req as AuthenticatedRequest;
         authReq.userId = decoded.id;
+        authReq.authLevel = user.auth;
         next();
       }
     }

@@ -3,7 +3,10 @@ export type TUser = {
   name: string;
   email: string;
   password: string;
+  auth: AuthLevel;
 };
+
+export type AuthLevel = "user" | "moderator" | "admin";
 
 export type StrengthResult = {
   strong: boolean;

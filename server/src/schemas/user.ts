@@ -9,6 +9,7 @@ const SUser = new Schema<TUser>(
     name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    auth: { type: String, default: "user" },
   },
   { timestamps: true }
 );
