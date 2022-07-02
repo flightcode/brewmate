@@ -7,6 +7,7 @@ import { TBrewery } from "../models/brewery";
 const SBrewery = new Schema<TBrewery>(
   {
     name: { type: String, required: true },
+    region: String,
     country: String,
   },
   { timestamps: true }
