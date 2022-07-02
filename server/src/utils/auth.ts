@@ -2,6 +2,7 @@ import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import APIError from "./error";
+import User from "../schemas/user";
 
 export type AuthenticatedRequest = Request & {
   userId: string;
@@ -30,15 +31,25 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
   jwt.verify(
     token,
     process.env.TOKEN_SECRET,
-    (err, decoded: { id: string }) => {
+    async (err, decoded: { id: string }) => {
       // Check JWT valid
       if (err || !decoded.id) {
         return new APIError("UnauthorizedError", err.message).sendResponse(res);
       }
 
-      const authReq = req as AuthenticatedRequest;
-      authReq.userId = decoded.id;
-      next();
+      // Check user exists
+      const user = await User.findById(decoded.id);
+
+      if (!user) {
+        return new APIError(
+          "UnauthorizedError",
+          "User doesn't exist"
+        ).sendResponse(res);
+      } else {
+        const authReq = req as AuthenticatedRequest;
+        authReq.userId = decoded.id;
+        next();
+      }
     }
   );
 }
