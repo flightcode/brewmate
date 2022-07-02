@@ -49,8 +49,8 @@ export function getByCountry(req: Request, res: Response) {
 }
 
 export function add(req: Request, res: Response) {
-  // const authReq = req as AuthenticatedRequest;
-  const { name, region, country } = req.body;
+  const authReq = req as AuthenticatedRequest;
+  const { name, region, country } = authReq.body;
 
   // Check fields
   if (!name) {
@@ -78,8 +78,8 @@ export function add(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { id } = req.params;
-  const { name, region, country } = req.body;
+  const { id } = authReq.params;
+  const { name, region, country } = authReq.body;
 
   // Check permissions
   if (authReq.authLevel !== "admin" && authReq.authLevel !== "moderator") {
@@ -131,7 +131,7 @@ export async function update(req: Request, res: Response) {
 
 export async function remove(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { id } = req.params;
+  const { id } = authReq.params;
 
   // Check permissions
   if (authReq.authLevel !== "admin" && authReq.authLevel !== "moderator") {

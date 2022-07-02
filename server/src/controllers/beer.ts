@@ -54,7 +54,8 @@ export function getByType(req: Request, res: Response) {
 }
 
 export async function add(req: Request, res: Response) {
-  const { name, brewery, type, hops, malts, abv, ibu } = req.body;
+  const authReq = req as AuthenticatedRequest;
+  const { name, brewery, type, hops, malts, abv, ibu } = authReq.body;
 
   // Check required fields
   if (!name || !type) {
@@ -122,8 +123,8 @@ export async function add(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { id } = req.params;
-  const { name, brewery, type, hops, malts, abv, ibu } = req.body;
+  const { id } = authReq.params;
+  const { name, brewery, type, hops, malts, abv, ibu } = authReq.body;
 
   // Check permissions
   if (authReq.authLevel !== "admin" && authReq.authLevel !== "moderator") {
@@ -229,7 +230,7 @@ export async function update(req: Request, res: Response) {
 
 export function remove(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { id } = req.params;
+  const { id } = authReq.params;
 
   // Check permissions
   if (authReq.authLevel !== "admin" && authReq.authLevel !== "moderator") {
