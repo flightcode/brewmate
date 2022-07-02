@@ -5,7 +5,7 @@ import validate from "deep-email-validator";
 import APIError from "../utils/error";
 import { AuthenticatedRequest } from "../utils/auth";
 import { checkStrength } from "../utils/passwordStrength";
-import { TUser } from "../models/user";
+import { TUser } from "../types/user";
 import User from "../schemas/user";
 
 export function getSelf(req: Request, res: Response) {

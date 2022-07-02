@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import APIError from "../utils/error";
 import { AuthenticatedRequest } from "../utils/auth";
-import { TBrewery } from "../models/brewery";
+import { TBrewery } from "../types/brewery";
 import Brewery from "../schemas/brewery";
 
 export function getAll(req: Request, res: Response) {

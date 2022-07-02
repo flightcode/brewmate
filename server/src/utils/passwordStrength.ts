@@ -1,4 +1,4 @@
-import { StrengthResult } from "../models/user";
+import { StrengthResult } from "../types/user";
 
 const MIN_LENGTH = 8;
 const MIN_LOWERCASE = 1;

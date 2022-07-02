@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { AuthenticatedRequest } from "../utils/auth";
 import APIError from "../utils/error";
-import { TBeer } from "../models/beer";
+import { AuthenticatedRequest } from "../utils/auth";
+import { TBeer } from "../types/beer";
 import Beer from "../schemas/beer";
 import Brewery from "../schemas/brewery";
 

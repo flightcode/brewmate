@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { TUser } from "src/models/user";
+import { TUser } from "src/types/user";
 
 /**
  * Schema representing User in database

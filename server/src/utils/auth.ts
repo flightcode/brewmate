@@ -2,7 +2,7 @@ import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import APIError from "./error";
-import { AuthLevel } from "../models/user";
+import { AuthLevel } from "../types/user";
 import User from "../schemas/user";
 
 export type AuthenticatedRequest = Request & {

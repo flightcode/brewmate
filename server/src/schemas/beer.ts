@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { TBeer } from "../models/beer";
+import { TBeer } from "../types/beer";
 
 /**
  * Schema representing Beer in database
