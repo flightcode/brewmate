@@ -4,6 +4,7 @@ export type TUser = {
   email: string;
   password: string;
   auth: AuthLevel;
+  image?: string;
 };
 
 export type AuthLevel = "user" | "moderator" | "admin";

@@ -3,4 +3,5 @@ export type TBrewery = {
   name: string;
   region?: string;
   country?: string;
+  image?: string;
 };

@@ -10,6 +10,7 @@ const SUser = new Schema<TUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     auth: { type: String, default: "user" },
+    image: String,
   },
   { timestamps: true }
 );

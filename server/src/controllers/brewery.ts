@@ -50,7 +50,7 @@ export function getByCountry(req: Request, res: Response) {
 
 export function add(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { name, region, country } = authReq.body;
+  const { name, region, country, image } = authReq.body;
 
   // Check fields
   if (!name) {
@@ -64,6 +64,7 @@ export function add(req: Request, res: Response) {
     name,
     region,
     country,
+    image,
   });
 
   brewery
@@ -79,7 +80,7 @@ export function add(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
   const { id } = authReq.params;
-  const { name, region, country } = authReq.body;
+  const { name, region, country, image } = authReq.body;
 
   // Check permissions
   if (authReq.authLevel !== "admin" && authReq.authLevel !== "moderator") {
@@ -102,7 +103,7 @@ export async function update(req: Request, res: Response) {
   }
 
   // Check fields
-  if (!name && !region && !country) {
+  if (!name && !region && !country && !image) {
     return new APIError("UnprocessableError", "Fields empty").sendResponse(res);
   }
 
@@ -117,6 +118,10 @@ export async function update(req: Request, res: Response) {
   // Update country
   if (country) {
     brewery.country = country;
+  }
+  // Update image
+  if (image) {
+    brewery.image = image;
   }
 
   brewery

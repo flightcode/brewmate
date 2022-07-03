@@ -9,6 +9,7 @@ const SBrewery = new Schema<TBrewery>(
     name: { type: String, required: true },
     region: String,
     country: String,
+    image: String,
   },
   { timestamps: true }
 );

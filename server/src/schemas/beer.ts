@@ -24,6 +24,7 @@ const SBeer = new Schema<TBeer>(
     malts: [String],
     abv: Number,
     ibu: Number,
+    image: String,
     reviews: [SReview],
   },
   { timestamps: true }

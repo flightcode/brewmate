@@ -84,7 +84,7 @@ export function getRating(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { name, brewery, type, hops, malts, abv, ibu } = authReq.body;
+  const { name, brewery, type, hops, malts, abv, ibu, image } = authReq.body;
 
   // Check required fields
   if (!name || !type) {
@@ -138,6 +138,7 @@ export async function add(req: Request, res: Response) {
     malts: arrMalts,
     abv: numABV,
     ibu: numIBU,
+    image,
   });
 
   beer
@@ -153,7 +154,7 @@ export async function add(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
   const { id } = authReq.params;
-  const { name, brewery, type, hops, malts, abv, ibu } = authReq.body;
+  const { name, brewery, type, hops, malts, abv, ibu, image } = authReq.body;
 
   // Check permissions
   if (authReq.authLevel !== "admin" && authReq.authLevel !== "moderator") {
@@ -176,7 +177,7 @@ export async function update(req: Request, res: Response) {
   }
 
   // Check fields
-  if (!name && !brewery && !type && !hops && !malts && !abv && !ibu) {
+  if (!name && !brewery && !type && !hops && !malts && !abv && !ibu && !image) {
     return new APIError("UnprocessableError", "Fields empty").sendResponse(res);
   }
 
@@ -245,6 +246,11 @@ export async function update(req: Request, res: Response) {
   if (malts) {
     const arrMalts = Array.isArray(malts) ? malts : [malts];
     beer.malts = arrMalts;
+  }
+
+  // Update image
+  if (image) {
+    beer.image = image;
   }
 
   beer

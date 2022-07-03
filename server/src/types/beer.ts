@@ -11,6 +11,7 @@ export type TBeer = {
   malts?: string[];
   abv: number;
   ibu: number;
+  image?: string;
   reviews: TReview[];
 };
 

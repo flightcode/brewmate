@@ -65,10 +65,10 @@ export function getRatings(req: Request, res: Response) {
 
 export async function updateSelf(req: Request, res: Response) {
   const authReq = req as AuthenticatedRequest;
-  const { name, email, password } = req.body;
+  const { name, email, password, image } = req.body;
 
   // Check fields
-  if (!name && !email && !password) {
+  if (!name && !email && !password && !image) {
     return new APIError("UnprocessableError", "Credentials empty").sendResponse(
       res
     );
@@ -129,6 +129,11 @@ export async function updateSelf(req: Request, res: Response) {
 
     // Encrypt password
     user.password = await bcrypt.hash(password, 10);
+  }
+
+  // Update image
+  if (image) {
+    user.image = image;
   }
 
   user
